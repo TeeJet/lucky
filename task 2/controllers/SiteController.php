@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\components\MaxVisitOnline;
+use app\models\Visit;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -61,6 +63,12 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        if ($data = Yii::$app->request->post()) {
+            $data = Visit::getGroupsWithCountByPeriod($data['start'], $data['end']);
+            $maxOnline = (new MaxVisitOnline())->get($data);
+            Yii::$app->session->setFlash('count-online', $maxOnline);
+            return $this->redirect('index');
+        }
         return $this->render('index');
     }
 
