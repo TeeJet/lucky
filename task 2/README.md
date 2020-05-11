@@ -10,7 +10,6 @@ docker-compose up -d
 ```
 Выполните миграции
 ```
-docker-compose up -d
 docker exec -ti task2_php_1 ./yii migrate
 ```
 
