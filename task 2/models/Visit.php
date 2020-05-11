@@ -35,4 +35,22 @@ class Visit extends ActiveRecord
             ->asArray()
             ->all();
     }
+
+    public static function getMinDate()
+    {
+        return Visit::find()
+            ->select('datetime')
+            ->orderBy(['datetime' => SORT_ASC])
+            ->limit(1)
+            ->scalar();
+    }
+
+    public static function getMaxDate()
+    {
+        return Visit::find()
+            ->select('datetime')
+            ->orderBy(['datetime' => SORT_DESC])
+            ->limit(1)
+            ->scalar();
+    }
 }

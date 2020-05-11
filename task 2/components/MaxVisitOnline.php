@@ -6,51 +6,50 @@ use app\models\Visit;
 
 class MaxVisitOnline
 {
+    private $array;
+
     public function get($data)
     {
-        $array = $this->toFlat($data);
-        return $this->maxSubArraySum($array);
+        $this->array = $data;
+        $this->toFlat();
+        return $this->maxSubArraySum();
     }
 
     /**
-     * Returns converted data to simple array
-     *
-     * @param $data
-     * @return array
+     * Преобразует массив дат и статусов для подсчета максимального онлайна
      */
-    private function toFlat($data)
+    private function toFlat()
     {
         $array = [];
-        foreach ($data as $item) {
+        foreach ($this->array as $item) {
             $array[$item['datetime']] = $array[$item['datetime']] ?? 0;
             $array[$item['datetime']] += $item['status'] == Visit::STATUS_IN ? $item['count'] : -$item['count'];
         }
-        return array_values($array);
+        $this->array = array_values($array);
     }
 
     /**
-     * Returns maximum subarray sum using Kadane’s algorithm.
-     * The source is here: https://www.red-gate.com/simple-talk/blogs/kadanes-solution-maximum-subarray-problem/
+     * Возвращает максимальную сумму подмассива, использую алгоритм Кадана.
+     * Источник здесь: https://www.red-gate.com/simple-talk/blogs/kadanes-solution-maximum-subarray-problem/
      *
-     * @param $a
      * @return int
      */
-    private function maxSubArraySum($a)
+    private function maxSubArraySum()
     {
-        $max_so_far = 0;
-        $max_ending_here = 0;
+        $maxSoFar = 0;
+        $maxEndingHere = 0;
 
-        $size = count($a);
+        $size = count($this->array);
         for ($i = 0; $i < $size; $i++) {
-            $max_ending_here = $max_ending_here + $a[$i];
-            if ($max_so_far < $max_ending_here) {
-                $max_so_far = $max_ending_here;
+            $maxEndingHere = $maxEndingHere + $this->array[$i];
+            if ($maxSoFar < $maxEndingHere) {
+                $maxSoFar = $maxEndingHere;
             }
 
-            if ($max_ending_here < 0) {
-                $max_ending_here = 0;
+            if ($maxEndingHere < 0) {
+                $maxEndingHere = 0;
             }
         }
-        return $max_so_far;
+        return $maxSoFar;
     }
 }

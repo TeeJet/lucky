@@ -3,8 +3,10 @@
 /* @var $this yii\web\View */
 
 
-use kartik\datetime\DateTimePicker;
-use yii\helpers\Html;$this->title = 'My Yii Application';
+use app\models\Visit;
+use kartik\daterange\DateRangePicker;
+use yii\helpers\Html;
+$this->title = 'Статистика';
 ?>
 <div class="site-index">
     <h2>Получить информацию о статистике</h2>
@@ -17,25 +19,28 @@ use yii\helpers\Html;$this->title = 'My Yii Application';
     </div>
     <?= Html::beginForm() ?>
     <div class="row">
-        <div class="col-lg-3">
-            <?= DateTimePicker::widget([
-                'name' => 'start',
-                'options' => ['placeholder' => 'Выберите дату начала'],
+        <div class="col-lg-4">
+            <?= DateRangePicker::widget([
+                'name' => 'daterange',
                 'convertFormat' => true,
+                'startAttribute' => 'start',
+                'endAttribute' => 'end',
                 'pluginOptions' => [
-                    'format' => 'php: Y-m-d H:i:s'
+                    'timePicker' => true,
+                    'timePickerSeconds' => true,
+                    'timePicker24Hour' => true,
+                    'dateLimit' => ['day' => 1],
+                    'minDate' => Visit::getMinDate(),
+                    'maxDate' => Visit::getMaxDate(),
+                    'locale' => [
+                        'format' => 'Y-m-d H:i:s'
+                    ]
+                ],
+                'options' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Выберите даты'
                 ]
-            ]) ?>
-        </div>
-        <div class="col-lg-3">
-            <?= DateTimePicker::widget([
-                'name' => 'end',
-                'options' => ['placeholder' => 'Выберите дату окончания'],
-                'convertFormat' => true,
-                'pluginOptions' => [
-                    'format' => 'php: Y-m-d H:i:s'
-                ]
-            ]) ?>
+            ]); ?>
         </div>
         <div class="col-lg-1">
             <?= Html::submitInput('Отправить', ['class' => 'btn btn-success']) ?>

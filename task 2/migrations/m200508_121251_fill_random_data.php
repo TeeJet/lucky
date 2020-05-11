@@ -13,11 +13,15 @@ class m200508_121251_fill_random_data extends Migration
      */
     public function safeUp()
     {
-        for ($i = 0; $i <= 10000; $i++) {
-            $this->insert('visits', [
-                'datetime' => new Expression("FROM_UNIXTIME(UNIX_TIMESTAMP('2020-04-30 14:53:27') + FLOOR(0 + (RAND() * 63072000)))"),
-                'status' => mt_rand(1, 2)
-            ]);
+        for ($j = 0; $j <= 100; $j++) {
+            $data = [];
+            for ($i = 0; $i <= 10000; $i++) {
+                $data[] = [
+                    new Expression("FROM_UNIXTIME(UNIX_TIMESTAMP('2020-05-01 00:00:00') + FLOOR(0 + (RAND() * 86400 * 7)))"),
+                    mt_rand(1, 2)
+                ];
+            }
+            $this->batchInsert('visits', ['datetime', 'status'], $data);
         }
     }
 
